@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Wait... Don't Close This! 🥺✨</title>
+    
+    <!-- Google Fonts: Quicksand for clean warmth, Playfair Display for editorial elegance, Caveat for handwritten bestie notes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Canvas Confetti for celebration -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Quicksand', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                        handwriting: ['Caveat', 'cursive'],
+                    },
+                    colors: {
+                        cream: '#FFF9F5',
+                        blush: '#FFE8EE',
+                        roseSoft: '#FFCAD4',
+                        roseVibrant: '#FF758F',
+                        lavenderSoft: '#F3E8FF',
+                        lavenderDeep: '#C084FC',
+                        cocoa: '#4A3538',
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'float-delayed': 'float 7s ease-in-out 2s infinite',
+                        'pulse-soft': 'pulseSoft 2.5s infinite',
+                        'wiggle': 'wiggle 0.4s ease-in-out',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+                            '50%': { transform: 'translateY(-14px) rotate(6deg)' },
+                        },
+                        pulseSoft: {
+                            '0%, 100%': { transform: 'scale(1)' },
+                            '50%': { transform: 'scale(1.03)' },
+                        },
+                        wiggle: {
+                            '0%, 100%': { transform: 'translateX(0)' },
+                            '25%': { transform: 'translateX(-6px)' },
+                            '75%': { transform: 'translateX(6px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Base & Custom Aesthetic Styling */
+        body {
+            background: linear-gradient(135deg, #FFF9F5 0%, #FFE8EE 48%, #F3E8FF 100%);
+            color: #4A3538;
+            overflow-x: hidden;
+            touch-action: pan-y;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Glassmorphism Card Effect */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.78);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1.5px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 20px 50px rgba(255, 117, 143, 0.14), 0 4px 15px rgba(74, 53, 56, 0.04);
+        }
+
+        /* Stationery Envelope / Card Styling */
+        .stationery-card {
+            background: #FFFDFB;
+            background-image: radial-gradient(#FFCAD4 0.75px, transparent 0.75px), radial-gradient(#F3E8FF 0.75px, #FFFDFB 0.75px);
+            background-size: 24px 24px;
+            background-position: 0 0, 12px 12px;
+            border: 2px solid #FFE0E6;
+            box-shadow: 0 24px 60px rgba(255, 117, 143, 0.18);
+        }
+
+        /* Bubble & Gradient Game Buttons */
+        .btn-primary {
+            background: linear-gradient(135deg, #FF758F 0%, #FF8FA3 50%, #C084FC 100%);
+            background-size: 200% auto;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 10px 25px -5px rgba(255, 117, 143, 0.45);
+        }
+        .btn-primary:hover {
+            background-position: right center;
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 14px 30px -5px rgba(255, 117, 143, 0.55);
+        }
+        .btn-primary:active {
+            transform: translateY(1px) scale(0.98);
+        }
+
+        /* Coupon Ticket Perforated Edge */
+        .coupon-ticket {
+            position: relative;
+            background: linear-gradient(135deg, #FFF5F7 0%, #F9F2FF 100%);
+            border: 1.5px dashed #FF8FA3;
+            transition: all 0.25s ease;
+        }
+        .coupon-ticket:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 117, 143, 0.15);
+        }
+        .coupon-redeemed {
+            background: #F4FBF7;
+            border: 1.5px solid #6EE7B7;
+            opacity: 0.92;
+        }
+
+        /* Screen Shake Animation for Gussa Hit */
+        @keyframes screenShake {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            20% { transform: translate(-6px, 3px) rotate(-1deg); }
+            40% { transform: translate(6px, -3px) rotate(1deg); }
+            60% { transform: translate(-4px, -2px) rotate(-0.5deg); }
+            80% { transform: translate(4px, 2px) rotate(0.5deg); }
+        }
+        .shake-container {
+            animation: screenShake 0.38s ease-in-out;
+        }
+
+        /* Smooth Fade In */
+        .screen-transition {
+            animation: fadeUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(18px) scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Game Canvas Container */
+        #gameCanvas {
+            touch-action: none;
+            cursor: grab;
+        }
+        #gameCanvas:active {
+            cursor: grabbing;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 relative select-none">
+
+    <!-- Ambient Floating Pastel Decor -->
+    <div class="fixed inset-0 pointer-events-none overflow-hidden z-0" aria-hidden="true">
+        <span class="absolute top-10 left-[8%] text-2xl sm:text-3xl opacity-45 animate-float">🌸</span>
+        <span class="absolute top-24 right-[10%] text-xl sm:text-2xl opacity-40 animate-float-delayed">✨</span>
+        <span class="absolute bottom-20 left-[12%] text-2xl sm:text-3xl opacity-40 animate-float-delayed">💖</span>
+        <span class="absolute bottom-14 right-[14%] text-2xl sm:text-3xl opacity-45 animate-float">🧸</span>
+        <span class="absolute top-1/2 left-[4%] text-xl opacity-30 animate-float">🧋</span>
+        <span class="absolute top-1/3 right-[5%] text-xl opacity-30 animate-float-delayed">🌷</span>
+    </div>
+
+    <!-- Top Floating Sound Control -->
+    <div class="fixed top-4 right-4 z-50 flex items-center gap-2">
+        <button id="creatorStatusBtn" onclick="toggleCreatorDashboard()" title="Check Live Forgiveness Status"
+            class="glass-card px-3 py-2 rounded-full text-sm font-semibold text-cocoa flex items-center gap-1.5 hover:scale-105 transition shadow-sm relative">
+            <span id="statusBellIcon">🔔</span>
+            <span class="hidden sm:inline text-xs font-bold">Live Status</span>
+            <span id="statusDot" class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse"></span>
+        </button>
+
+        <button id="muteToggleBtn" onclick="toggleMute()" title="Toggle Cute Sound Effects"
+            class="glass-card px-3.5 py-2 rounded-full text-sm font-semibold text-cocoa flex items-center gap-1.5 hover:scale-105 transition shadow-sm">
+            <span id="muteIcon">🔊</span>
+            <span id="muteLabel" class="hidden sm:inline">Sound On</span>
+        </button>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- CREATOR LIVE STATUS MODAL (Watch "Usne Maaf Kr Diya!")   -->
+    <!-- ========================================================= -->
+    <div id="creatorModal" class="hidden fixed inset-0 z-50 bg-cocoa/40 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="glass-card bg-white/95 rounded-3xl p-6 sm:p-8 max-w-md w-full text-center relative shadow-2xl border-2 border-pink-200 screen-transition">
+            <button onclick="toggleCreatorDashboard()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-pink-50 text-cocoa/70 hover:text-roseVibrant font-bold flex items-center justify-center">
+                ✕
+            </button>
+
+            <div class="inline-flex items-center gap-1.5 bg-purple-100 text-purple-700 text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full mb-3">
+                <span>📡 Live Creator Tracker</span>
+            </div>
+
+            <div id="liveStatusHero" class="my-3">
+                <div id="liveStatusEmoji" class="text-5xl mb-2 animate-bounce">⏳</div>
+                <h3 id="liveStatusTitle" class="font-serif text-2xl font-bold text-cocoa">
+                    Waiting for her forgiveness...
+                </h3>
+                <p id="liveStatusSubtitle" class="text-xs sm:text-sm text-cocoa/70 mt-1">
+                    Keep this open or check back—updates automatically the second she clicks "Chalo Maaf Kiya 💖"!
+                </p>
+            </div>
+
+            <!-- Live Details Box -->
+            <div class="bg-pink-50/80 rounded-2xl p-4 border border-pink-100 text-left my-4 space-y-2">
+                <div class="flex items-center justify-between text-xs">
+                    <span class="font-bold text-cocoa/60">STATUS:</span>
+                    <span id="liveBadgeText" class="font-bold text-amber-600 bg-amber-100 px-2.5 py-0.5 rounded-full">Pending 🥺</span>
+                </div>
+                <div class="flex items-center justify-between text-xs">
+                    <span class="font-bold text-cocoa/60">TIME:</span>
+                    <span id="liveTimestampText" class="font-semibold text-cocoa">Not yet</span>
+                </div>
+                <div class="pt-1 border-t border-pink-200/60">
+                    <span class="block text-xs font-bold text-cocoa/60 mb-1">CLAIMED COUPONS:</span>
+                    <ul id="liveCouponsList" class="text-xs font-semibold text-cocoa/85 space-y-1">
+                        <li>• Waiting for her picks...</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="flex gap-2">
+                <button onclick="toggleCreatorDashboard()" class="btn-primary flex-1 py-3 rounded-xl text-white font-bold text-sm">
+                    Done / Back to Page
+                </button>
+                <button onclick="resetLiveStatus()" title="Reset status for testing" class="px-3.5 py-3 rounded-xl bg-white border border-pink-200 text-cocoa/65 hover:text-roseVibrant font-bold text-xs">
+                    Reset 🔄
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN APP CONTAINER -->
+    <main class="w-full max-w-lg z-10 relative">
+
+        <!-- ========================================================= -->
+        <!-- SCREEN 1: LANDING SCREEN                                  -->
+        <!-- ========================================================= -->
+        <section id="landingScreen" class="glass-card rounded-3xl p-7 sm:p-10 text-center screen-transition">
+            <!-- Cute Badge -->
+            <div class="inline-flex items-center gap-2 bg-white/90 border border-roseSoft px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold text-roseVibrant mb-5 shadow-sm">
+                <span>🚨 Emergency Peace Offering</span>
+            </div>
+
+            <!-- Cute Animated Character / Emoji Header -->
+            <div class="text-5xl sm:text-6xl mb-4 animate-float inline-block">
+                🥺👉👈
+            </div>
+
+            <h1 class="font-serif text-3xl sm:text-4xl font-bold text-cocoa leading-tight mb-4">
+                Wait... Don't close this tab yet! <span class="inline-block">🥺✨</span>
+            </h1>
+
+            <p class="text-base sm:text-lg text-cocoa/85 font-medium leading-relaxed mb-7">
+                I know you're mad at me right now, and honestly, you have every right to be. Before you stay angry forever, beat this tiny game to unlock my official apology!
+            </p>
+
+            <!-- Mini Preview Pills -->
+            <div class="flex flex-wrap justify-center gap-2 mb-7 text-xs font-semibold text-cocoa/75">
+                <span class="bg-white/80 px-3 py-1.5 rounded-full border border-pink-100">🍫 Catch Treats (+10)</span>
+                <span class="bg-white/80 px-3 py-1.5 rounded-full border border-pink-100">⛈️ Dodge Gussa (-5)</span>
+                <span class="bg-white/80 px-3 py-1.5 rounded-full border border-pink-100">🏆 100 Pts to Unlock</span>
+            </div>
+
+            <button onclick="startGame()" class="btn-primary w-full py-4 px-6 rounded-2xl text-white font-bold text-lg sm:text-xl tracking-wide flex items-center justify-center gap-2.5 animate-pulse-soft">
+                <span>Start the Peace Offering Game</span>
+                <span class="text-2xl">🎮</span>
+            </button>
+
+            <p class="mt-4 text-xs text-cocoa/55 font-medium">
+                Takes ~15 seconds • Made with extra guilt & bestie love 💗
+            </p>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- SCREEN 2: INTERACTIVE MINI-GAME                           -->
+        <!-- ========================================================= -->
+        <section id="gameScreen" class="hidden glass-card rounded-3xl p-4 sm:p-6 screen-transition">
+            <!-- Game Header & Forgiveness Meter -->
+            <div class="mb-3">
+                <div class="flex items-center justify-between text-xs sm:text-sm font-bold text-cocoa mb-1.5">
+                    <span class="flex items-center gap-1.5">
+                        <span>💖 Forgiveness Meter:</span>
+                        <span id="scoreText" class="text-roseVibrant text-base">0%</span>
+                    </span>
+                    <span id="microCaption" class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-white/90 text-roseVibrant transition-all">
+                        Catch the treats! 🧋
+                    </span>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="w-full h-3.5 bg-white/90 rounded-full overflow-hidden p-0.5 border border-pink-100 shadow-inner">
+                    <div id="progressBar" class="h-full rounded-full transition-all duration-200 ease-out"
+                        style="width: 0%; background: linear-gradient(90deg, #FF8FA3 0%, #FF758F 50%, #C084FC 100%);">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Responsive Game Canvas Wrapper -->
+            <div id="canvasWrapper" class="relative w-full h-[360px] sm:h-[400px] rounded-2xl overflow-hidden border-2 border-white shadow-inner bg-gradient-to-b from-[#FFF5F8] via-[#FFF9FC] to-[#F5ECFF]">
+                <canvas id="gameCanvas" class="w-full h-full block"></canvas>
+
+                <!-- Floating Helper Hint inside Canvas (fades after 3s) -->
+                <div id="dragHint" class="pointer-events-none absolute inset-x-0 top-1/3 flex justify-center transition-opacity duration-500">
+                    <div class="bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full text-xs sm:text-sm font-bold text-cocoa shadow-md border border-pink-100">
+                        👈 Drag or move mouse to catch peace offerings! 👉
+                    </div>
+                </div>
+            </div>
+
+            <!-- Subtle Escape Hatch -->
+            <div class="mt-3.5 text-center">
+                <button onclick="skipToApology()" class="text-xs font-semibold text-cocoa/55 hover:text-roseVibrant underline decoration-dotted underline-offset-4 transition">
+                    Skip to Apology (If you're still too mad 🥺)
+                </button>
+            </div>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- SCREEN 3: ENVELOPE / REVEAL TRANSITION                    -->
+        <!-- ========================================================= -->
+        <section id="envelopeScreen" class="hidden glass-card rounded-3xl p-8 sm:p-10 text-center screen-transition">
+            <div class="inline-block bg-green-100/90 text-green-700 text-xs sm:text-sm font-bold px-4 py-1.5 rounded-full mb-4">
+                🎉 100% Forgiveness Meter Unlocked!
+            </div>
+            
+            <h2 class="font-serif text-2xl sm:text-3xl font-bold text-cocoa mb-2">
+                You Won! (As always, you're the best 🏆💖)
+            </h2>
+            <p class="text-sm sm:text-base text-cocoa/75 mb-7">
+                Tap the sealed peace-offering envelope below to read my official apology note...
+            </p>
+
+            <!-- Interactive Envelope Button -->
+            <button onclick="openApologyCard()" class="group relative mx-auto w-64 h-44 sm:w-72 sm:h-48 rounded-2xl bg-gradient-to-br from-[#FFCAD4] via-[#FFB3C1] to-[#E9D5FF] p-1 shadow-xl hover:scale-105 transition-all duration-300 flex flex-col items-center justify-center cursor-pointer">
+                <div class="w-full h-full bg-[#FFFDFB] rounded-xl border border-pink-200 flex flex-col items-center justify-center relative overflow-hidden">
+                    <!-- Decorative Envelope Flap Lines -->
+                    <div class="absolute top-0 inset-x-0 h-20 bg-gradient-to-b from-pink-100/80 to-transparent" style="clip-path: polygon(0 0, 50% 85%, 100% 0);"></div>
+                    
+                    <!-- Wax Seal Heart -->
+                    <div class="z-10 w-14 h-14 rounded-full bg-gradient-to-tr from-roseVibrant to-pink-400 text-white text-2xl flex items-center justify-center shadow-md group-hover:rotate-12 transition-transform">
+                        💌
+                    </div>
+                    <span class="z-10 mt-3 font-handwriting text-2xl font-bold text-cocoa">
+                        For My Bestie ✨
+                    </span>
+                    <span class="z-10 text-[11px] font-bold uppercase tracking-wider text-roseVibrant mt-0.5">
+                        Tap to Open
+                    </span>
+                </div>
+            </button>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- SCREEN 4: THE PLEASING APOLOGY CARD                       -->
+        <!-- ========================================================= -->
+        <section id="apologyCardScreen" class="hidden stationery-card rounded-3xl p-6 sm:p-8 screen-transition relative overflow-hidden">
+            <!-- Top Decorative Ribbon -->
+            <div class="flex items-center justify-between border-b border-pink-100 pb-4 mb-5">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl">🏆</span>
+                    <div>
+                        <span class="block text-[11px] font-bold uppercase tracking-widest text-roseVibrant">Official Peace Treaty</span>
+                        <h2 class="font-serif text-xl sm:text-2xl font-bold text-cocoa leading-tight">
+                            You Won! (As always, you're the best 💖)
+                        </h2>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Heartfelt Hinglish Bestie Letter -->
+            <div class="bg-white/90 rounded-2xl p-5 sm:p-6 border border-pink-100/80 shadow-sm mb-6 relative">
+                <span class="font-handwriting text-2xl sm:text-3xl text-roseVibrant font-bold block mb-2">
+                    Dear Gunnuuu Babyy,
+                </span>
+                
+                <p class="text-sm sm:text-base text-cocoa/90 leading-relaxed font-medium mb-3">
+                    Okay listen... I'm genuinely really sorry. <span class="bg-pink-100/80 px-1.5 py-0.5 rounded-md font-bold text-cocoa">Yk naa I'm a total buddhu sometimes</span> and I mess things up without thinking properly, <span class="bg-purple-100/80 px-1.5 py-0.5 rounded-md font-bold text-cocoa">but tere ko hurt karna is NEVER my intention</span>—not even 1%.
+                </p>
+                
+                <p class="text-sm sm:text-base text-cocoa/90 leading-relaxed font-medium">
+                    You're my bestie and seeing you upset because of me is literally the worst feeling. Please gussa chor de? and I love youu BHOT JYADAA🥺🌷
+                </p>
+
+                <div class="mt-4 text-right font-handwriting text-2xl text-cocoa/80">
+                    — Tera CUTUU(Suyash) 🤡💗
+                </div>
+            </div>
+
+            <!-- Redeemable Official Apology Coupons -->
+            <div class="mb-7">
+                <div class="flex items-center justify-between mb-2.5">
+                    <h3 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-cocoa/70 flex items-center gap-1.5">
+                        <span>🎟️ Official Apology Coupons</span>
+                    </h3>
+                    <span class="text-[11px] font-semibold text-roseVibrant">Tap to claim!</span>
+                </div>
+
+                <div class="space-y-2.5">
+                    <!-- Coupon 1 -->
+                    <div onclick="redeemCoupon(this, 'Boba / Chocolate Treat')" class="coupon-ticket rounded-xl p-3.5 cursor-pointer flex items-center justify-between gap-3">
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl">🧋</span>
+                            <div>
+                                <p class="text-xs sm:text-sm font-bold text-cocoa">1x Unlimited Chocolate / Boba Treat</p>
+                                <p class="text-[11px] text-cocoa/65">No budget limit, valid anytime!</p>
+                            </div>
+                        </div>
+                        <span class="coupon-badge shrink-0 text-xs font-bold bg-white text-roseVibrant px-3 py-1 rounded-full border border-pink-200 shadow-sm">
+                            Claim
+                        </span>
+                    </div>
+
+                    <!-- Coupon 2 -->
+                    <div onclick="redeemCoupon(this, 'Free Rant Session')" class="coupon-ticket rounded-xl p-3.5 cursor-pointer flex items-center justify-between gap-3">
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl">🎧</span>
+                            <div>
+                                <p class="text-xs sm:text-sm font-bold text-cocoa">1x Free Rant Session</p>
+                                <p class="text-[11px] text-cocoa/65">I'll just listen quietly, zero excuses.</p>
+                            </div>
+                        </div>
+                        <span class="coupon-badge shrink-0 text-xs font-bold bg-white text-roseVibrant px-3 py-1 rounded-full border border-pink-200 shadow-sm">
+                            Claim
+                        </span>
+                    </div>
+
+                    <!-- Coupon 3 -->
+                    <div onclick="redeemCoupon(this, 'Lifetime Buddhu Pass')" class="coupon-ticket rounded-xl p-3.5 cursor-pointer flex items-center justify-between gap-3">
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl">🤡</span>
+                            <div>
+                                <p class="text-xs sm:text-sm font-bold text-cocoa">1x Lifetime Pass to Call Me Buddhu</p>
+                                <p class="text-[11px] text-cocoa/65">100% agreed, no arguments allowed.</p>
+                            </div>
+                        </div>
+                        <span class="coupon-badge shrink-0 text-xs font-bold bg-white text-roseVibrant px-3 py-1 rounded-full border border-pink-200 shadow-sm">
+                            Claim
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Forgiveness Verdict Section -->
+            <div class="pt-4 border-t border-pink-100 text-center">
+                <p class="text-xs font-bold uppercase tracking-wider text-cocoa/60 mb-3">
+                    Final Verdict Time ✨
+                </p>
+
+                <div id="verdictContainer" class="flex flex-col sm:flex-row items-center justify-center gap-3 min-h-[64px] relative">
+                    <!-- Forgiven Button -->
+                    <button id="forgiveBtn" onclick="acceptApology()"
+                        class="btn-primary w-full sm:w-auto px-7 py-3.5 rounded-2xl text-white font-bold text-base sm:text-lg shadow-lg z-20 transition-transform duration-200">
+                        Chalo Maaf Kiya 💖
+                    </button>
+
+                    <!-- Playful Dodging Angry Button -->
+                    <button id="angryBtn" onclick="dodgeAngryButton()"
+                        class="w-full sm:w-auto px-5 py-3 rounded-2xl bg-white border-2 border-pink-200 text-cocoa/80 font-bold text-sm hover:bg-pink-50 transition-all duration-200 shadow-sm">
+                        Abhi Bhi Gussa Hoon 😤
+                    </button>
+                </div>
+
+                <p id="pleaCaption" class="text-xs font-semibold text-roseVibrant mt-2.5 min-h-[18px] transition-all"></p>
+            </div>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- SCREEN 5: FINAL CELEBRATION SCREEN                        -->
+        <!-- ========================================================= -->
+        <section id="celebrationScreen" class="hidden glass-card rounded-3xl p-8 sm:p-10 text-center screen-transition">
+            <div class="text-6xl sm:text-7xl mb-4 animate-bounce">
+                🥳💖✨
+            </div>
+
+            <div class="inline-block bg-pink-100 text-roseVibrant text-xs font-bold px-4 py-1.5 rounded-full mb-3">
+                Peace Treaty Signed!
+            </div>
+
+            <h2 class="font-serif text-3xl sm:text-4xl font-bold text-cocoa mb-3">
+                Besties Forever! 👯‍♀️🌸
+            </h2>
+
+            <p class="text-base sm:text-lg text-cocoa/85 font-medium leading-relaxed mb-6">
+                Screenshot this & send it to me so I know I'm safe! 🎉<br>
+                <span class="text-sm text-cocoa/70">(And tell me which chocolate/boba treat I owe you first!)</span>
+            </p>
+
+            <!-- Summary of Claimed Coupons -->
+            <div id="claimedSummaryBox" class="bg-white/85 rounded-2xl p-4 border border-pink-100 mb-5 text-left">
+                <div class="flex items-center justify-between mb-2">
+                    <p class="text-xs font-bold uppercase tracking-wider text-roseVibrant">
+                        📜 Validated Peace Treaty Perks:
+                    </p>
+                    <span id="liveSyncTag" class="text-[10px] font-bold bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full">
+                        ✓ Notified Him!
+                    </span>
+                </div>
+                <ul id="claimedList" class="text-xs sm:text-sm font-semibold text-cocoa/85 space-y-1.5">
+                    <li>✨ Official "No More Gussa" Status Activated</li>
+                </ul>
+            </div>
+
+            <!-- Instant WhatsApp & Copy Proof Buttons -->
+            <div class="space-y-2.5 mb-5">
+                <button onclick="sendWhatsAppProof()" class="w-full py-3.5 px-5 rounded-2xl bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600 text-white font-bold text-sm sm:text-base shadow-lg shadow-emerald-500/30 flex items-center justify-center gap-2 transition transform hover:-translate-y-0.5">
+                    <span>Send Proof on WhatsApp</span>
+                    <span class="text-lg">💬</span>
+                </button>
+
+                <button onclick="copyConfirmationMessage()" class="w-full py-3 px-5 rounded-2xl bg-white/95 border border-pink-200 text-cocoa font-bold text-xs sm:text-sm hover:bg-pink-50 flex items-center justify-center gap-2 transition">
+                    <span>Copy Confirmation Message</span>
+                    <span>📋</span>
+                </button>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                <button onclick="fireConfettiBurst()" class="btn-primary px-6 py-3 rounded-2xl text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2">
+                    <span>More Celebration Confetti!</span>
+                    <span>🎊</span>
+                </button>
+                <button onclick="replayAll()" class="px-5 py-3 rounded-2xl bg-white/90 border border-pink-200 text-cocoa/75 font-bold text-xs sm:text-sm hover:bg-white transition">
+                    Play Again 🔄
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Custom Toast Notification (No alert() used!) -->
+    <div id="toastBox" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 pointer-events-none opacity-0 transition-all duration-300 transform translate-y-3">
+        <div class="bg-cocoa text-white px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold shadow-xl flex items-center gap-2">
+            <span id="toastIcon">🎟️</span>
+            <span id="toastMessage">Coupon Claimed!</span>
+        </div>
+    </div>
+
+    <script>
+        /* ==========================================================================
+           1. WEB AUDIO API SYNTHESIZER (Cute, pleasant sound effects, no external URLs)
+           ========================================================================== */
+        let audioCtx = null;
+        let isMuted = false;
+
+        function initAudio() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContext();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function toggleMute() {
+            isMuted = !isMuted;
+            document.getElementById('muteIcon').textContent = isMuted ? '🔇' : '🔊';
+            document.getElementById('muteLabel').textContent = isMuted ? 'Muted' : 'Sound On';
+        }
+
+        function playTone(freq, type = 'sine', duration = 0.15, slideTo = null, volume = 0.12) {
+            if (isMuted) return;
+            try {
+                initAudio();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                if (slideTo) {
+                    osc.frequency.exponentialRampToValueAtTime(slideTo, audioCtx.currentTime + duration);
+                }
+
+                gain.gain.setValueAtTime(volume, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch (e) {
+                // Ignore audio errors on restricted devices
+            }
+        }
+
+        function playCatchSound() {
+            // Cheerful ascending chime
+            playTone(523.25, 'sine', 0.12, 783.99, 0.14);
+            setTimeout(() => playTone(783.99, 'triangle', 0.14, 1046.50, 0.1), 60);
+        }
+
+        function playBadSound() {
+            // Soft cartoonish bonk
+            playTone(220, 'sawtooth', 0.18, 110, 0.08);
+        }
+
+        function playWinFanfare() {
+            const notes = [523.25, 659.25, 783.99, 1046.50];
+            notes.forEach((n, idx) => {
+                setTimeout(() => playTone(n, 'triangle', 0.25, null, 0.14), idx * 110);
+            });
+        }
+
+        /* ==========================================================================
+           2. SCREEN NAVIGATION & TOAST HELPERS
+           ========================================================================== */
+        const screens = ['landingScreen', 'gameScreen', 'envelopeScreen', 'apologyCardScreen', 'celebrationScreen'];
+
+        function showScreen(screenId) {
+            screens.forEach(id => {
+                const el = document.getElementById(id);
+                if (id === screenId) {
+                    el.classList.remove('hidden');
+                } else {
+                    el.classList.add('hidden');
+                }
+            });
+        }
+
+        let toastTimeout;
+        function showToast(message, icon = '✨') {
+            const toastBox = document.getElementById('toastBox');
+            document.getElementById('toastMessage').textContent = message;
+            document.getElementById('toastIcon').textContent = icon;
+            
+            toastBox.classList.remove('opacity-0', 'translate-y-3');
+            toastBox.classList.add('opacity-100', 'translate-y-0');
+
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toastBox.classList.remove('opacity-100', 'translate-y-0');
+                toastBox.classList.add('opacity-0', 'translate-y-3');
+            }, 2400);
+        }
+
+        /* ==========================================================================
+           3. MINI-GAME: "CATCH THE PEACE OFFERINGS"
+           ========================================================================== */
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const canvasWrapper = document.getElementById('canvasWrapper');
+
+        let gameRunning = false;
+        let animationFrameId = null;
+        let score = 0;
+        const TARGET_SCORE = 100;
+
+        // Player basket properties
+        const player = {
+            x: 0,
+            y: 0,
+            width: 84,
+            height: 46,
+            targetX: 0
+        };
+
+        // Falling items & floating score popups
+        let items = [];
+        let popups = [];
+        let lastSpawnTime = 0;
+        let spawnInterval = 680; // ms between spawns
+
+        const GOOD_ITEMS = [
+            { emoji: '🍫', label: 'Chocolate!', points: 10 },
+            { emoji: '🧋', label: 'Boba!', points: 10 },
+            { emoji: '🌸', label: 'Flowers!', points: 10 },
+            { emoji: '🧸', label: 'Teddy!', points: 10 },
+            { emoji: '💖', label: 'Bestie Love!', points: 10 }
+        ];
+
+        const BAD_ITEMS = [
+            { emoji: '⛈️', caption: 'Oops, dodge the gussa!', points: -5 },
+            { emoji: '😤', caption: 'No gussa allowed!', points: -5 }
+        ];
+
+        function resizeCanvas() {
+            const rect = canvasWrapper.getBoundingClientRect();
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+            ctx.scale(dpr, dpr);
+
+            player.y = rect.height - 62;
+            if (player.x === 0) {
+                player.x = rect.width / 2;
+                player.targetX = rect.width / 2;
+            }
+        }
+
+        window.addEventListener('resize', () => {
+            if (gameRunning) resizeCanvas();
+        });
+
+        // Mouse & Touch Controls
+        function updatePlayerTarget(clientX) {
+            const rect = canvas.getBoundingClientRect();
+            const relX = clientX - rect.left;
+            const halfW = player.width / 2;
+            player.targetX = Math.max(halfW + 6, Math.min(rect.width - halfW - 6, relX));
+        }
+
+        canvas.addEventListener('mousemove', (e) => {
+            if (!gameRunning) return;
+            updatePlayerTarget(e.clientX);
+        });
+
+        canvas.addEventListener('touchstart', (e) => {
+            if (!gameRunning) return;
+            if (e.touches.length > 0) {
+                updatePlayerTarget(e.touches[0].clientX);
+            }
+        }, { passive: true });
+
+        canvas.addEventListener('touchmove', (e) => {
+            if (!gameRunning) return;
+            if (e.touches.length > 0) {
+                updatePlayerTarget(e.touches[0].clientX);
+            }
+        }, { passive: true });
+
+        function startGame() {
+            initAudio();
+            playTone(440, 'sine', 0.15, 660, 0.12);
+            
+            score = 0;
+            items = [];
+            popups = [];
+            lastSpawnTime = performance.now();
+            updateScoreUI();
+
+            showScreen('gameScreen');
+            resizeCanvas();
+
+            // Reset player center
+            const rect = canvasWrapper.getBoundingClientRect();
+            player.x = rect.width / 2;
+            player.targetX = rect.width / 2;
+
+            // Show drag hint briefly
+            const dragHint = document.getElementById('dragHint');
+            dragHint.style.opacity = '1';
+            setTimeout(() => {
+                dragHint.style.opacity = '0';
+            }, 3200);
+
+            gameRunning = true;
+            if (animationFrameId) cancelAnimationFrame(animationFrameId);
+            animationFrameId = requestAnimationFrame(gameLoop);
+        }
+
+        function spawnItem(canvasWidth) {
+            // 75% chance good treat, 25% chance gussa cloud
+            const isGood = Math.random() < 0.76;
+            const template = isGood
+                ? GOOD_ITEMS[Math.floor(Math.random() * GOOD_ITEMS.length)]
+                : BAD_ITEMS[Math.floor(Math.random() * BAD_ITEMS.length)];
+
+            const margin = 32;
+            const x = margin + Math.random() * (canvasWidth - margin * 2);
+            const speed = (2.6 + Math.random() * 1.6) * (canvasWidth < 400 ? 0.95 : 1.05);
+
+            items.push({
+                x: x,
+                y: -30,
+                radius: 22,
+                speed: speed,
+                wobbleOffset: Math.random() * Math.PI * 2,
+                isGood: isGood,
+                ...template
+            });
+        }
+
+        function updateScoreUI() {
+            const clamped = Math.max(0, Math.min(TARGET_SCORE, score));
+            document.getElementById('scoreText').textContent = `${clamped}%`;
+            document.getElementById('progressBar').style.width = `${clamped}%`;
+        }
+
+        function triggerShake(caption) {
+            const capEl = document.getElementById('microCaption');
+            capEl.textContent = caption;
+            capEl.classList.add('bg-red-100', 'text-red-600');
+            
+            canvasWrapper.classList.remove('shake-container');
+            void canvasWrapper.offsetWidth; // trigger reflow
+            canvasWrapper.classList.add('shake-container');
+
+            setTimeout(() => {
+                capEl.classList.remove('bg-red-100', 'text-red-600');
+            }, 1200);
+        }
+
+        function drawBasket(x, y, width, height) {
+            ctx.save();
+            ctx.translate(x, y);
+
+            // Soft shadow under basket
+            ctx.fillStyle = 'rgba(255, 117, 143, 0.2)';
+            ctx.beginPath();
+            ctx.ellipse(0, height / 2 + 6, width * 0.48, 7, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Cute Pastel Basket Body
+            const grad = ctx.createLinearGradient(0, -height / 2, 0, height / 2);
+            grad.addColorStop(0, '#FF8FA3');
+            grad.addColorStop(1, '#FF758F');
+
+            ctx.fillStyle = grad;
+            ctx.beginPath();
+            ctx.roundRect(-width / 2, -height / 2, width, height, [10, 10, 22, 22]);
+            ctx.fill();
+
+            // White rim on top
+            ctx.fillStyle = '#FFFFFF';
+            ctx.beginPath();
+            ctx.roundRect(-width / 2 - 4, -height / 2 - 4, width + 8, 11, 8);
+            ctx.fill();
+
+            // Cute Label on Basket
+            ctx.fillStyle = '#FFFFFF';
+            ctx.font = 'bold 11px Quicksand, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('💖 BESTIE 💖', 0, 5);
+
+            ctx.restore();
+        }
+
+        function gameLoop(timestamp) {
+            if (!gameRunning) return;
+
+            const rect = canvasWrapper.getBoundingClientRect();
+            const width = rect.width;
+            const height = rect.height;
+
+            ctx.clearRect(0, 0, width, height);
+
+            // Smoothly interpolate basket X toward pointer
+            player.x += (player.targetX - player.x) * 0.24;
+
+            // Spawn items periodically
+            if (timestamp - lastSpawnTime > spawnInterval) {
+                spawnItem(width);
+                lastSpawnTime = timestamp;
+            }
+
+            // Update & Draw Falling Items
+            for (let i = items.length - 1; i >= 0; i--) {
+                const item = items[i];
+                item.y += item.speed;
+                const swayX = Math.sin(timestamp * 0.004 + item.wobbleOffset) * 0.7;
+                item.x += swayX;
+
+                // Draw item glow circle
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(item.x, item.y, 21, 0, Math.PI * 2);
+                ctx.fillStyle = item.isGood ? 'rgba(255, 255, 255, 0.75)' : 'rgba(226, 232, 240, 0.8)';
+                ctx.fill();
+
+                // Draw Emoji
+                ctx.font = '28px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(item.emoji, item.x, item.y + 1);
+                ctx.restore();
+
+                // Collision Check with Basket
+                const hitX = Math.abs(item.x - player.x) < (player.width / 2 + item.radius * 0.65);
+                const hitY = Math.abs(item.y - player.y) < (player.height / 2 + item.radius * 0.65);
+
+                if (hitX && hitY) {
+                    if (item.isGood) {
+                        score = Math.min(TARGET_SCORE, score + item.points);
+                        playCatchSound();
+                        document.getElementById('microCaption').textContent = `${item.label} +10 💖`;
+                        popups.push({
+                            x: item.x,
+                            y: item.y - 15,
+                            text: '+10',
+                            color: '#FF758F',
+                            alpha: 1
+                        });
+                    } else {
+                        score = Math.max(0, score + item.points);
+                        playBadSound();
+                        triggerShake(item.caption);
+                        popups.push({
+                            x: item.x,
+                            y: item.y - 15,
+                            text: '-5',
+                            color: '#EF4444',
+                            alpha: 1
+                        });
+                    }
+
+                    updateScoreUI();
+                    items.splice(i, 1);
+
+                    // Check Win Condition
+                    if (score >= TARGET_SCORE) {
+                        handleGameWin();
+                        return;
+                    }
+                    continue;
+                }
+
+                // Remove if off screen
+                if (item.y > height + 40) {
+                    items.splice(i, 1);
+                }
+            }
+
+            // Draw Basket
+            drawBasket(player.x, player.y, player.width, player.height);
+
+            // Draw Floating Score Popups
+            for (let i = popups.length - 1; i >= 0; i--) {
+                const p = popups[i];
+                p.y -= 1.4;
+                p.alpha -= 0.025;
+                if (p.alpha <= 0) {
+                    popups.splice(i, 1);
+                    continue;
+                }
+                ctx.save();
+                ctx.globalAlpha = p.alpha;
+                ctx.font = 'bold 18px Quicksand, sans-serif';
+                ctx.fillStyle = p.color;
+                ctx.textAlign = 'center';
+                ctx.fillText(p.text, p.x, p.y);
+                ctx.restore();
+            }
+
+            animationFrameId = requestAnimationFrame(gameLoop);
+        }
+
+        function handleGameWin() {
+            gameRunning = false;
+            cancelAnimationFrame(animationFrameId);
+            playWinFanfare();
+            fireConfettiBurst();
+
+            setTimeout(() => {
+                showScreen('envelopeScreen');
+            }, 450);
+        }
+
+        function skipToApology() {
+            gameRunning = false;
+            if (animationFrameId) cancelAnimationFrame(animationFrameId);
+            playTone(523.25, 'sine', 0.2, 659.25, 0.1);
+            showScreen('apologyCardScreen');
+        }
+
+        function openApologyCard() {
+            playWinFanfare();
+            fireConfettiBurst();
+            showScreen('apologyCardScreen');
+        }
+
+        /* ==========================================================================
+           4. COUPONS & PLAYFUL VERDICT INTERACTIONS
+           ========================================================================== */
+        const claimedCoupons = new Set();
+
+        function redeemCoupon(cardEl, couponName) {
+            if (claimedCoupons.has(couponName)) {
+                showToast('Already claimed! Screenshot later 😉', '💖');
+                return;
+            }
+
+            claimedCoupons.add(couponName);
+            playCatchSound();
+
+            cardEl.classList.add('coupon-redeemed');
+            const badge = cardEl.querySelector('.coupon-badge');
+            badge.textContent = 'Claimed ✓';
+            badge.classList.remove('bg-white', 'text-roseVibrant', 'border-pink-200');
+            badge.classList.add('bg-emerald-500', 'text-white', 'border-emerald-500');
+
+            showToast(`Claimed: ${couponName}!`, '🎟️');
+        }
+
+        // Playful Dodging "Abhi Bhi Gussa Hoon" Button
+        let dodgeCount = 0;
+        const pleaMessages = [
+            "Are you sure? 🥺",
+            "Ek aur chocolate dunga! 🍫",
+            "Buddhu hoon naa, maaf kar de please 🙏",
+            "Error 404: Gussa not found! 🤖✨",
+            "Ab toh button bhi thak gaya, click Maaf Kiya! 💖"
+        ];
+
+        function dodgeAngryButton() {
+            playTone(300, 'sine', 0.12, 420, 0.09);
+            const angryBtn = document.getElementById('angryBtn');
+            const forgiveBtn = document.getElementById('forgiveBtn');
+            const pleaCaption = document.getElementById('pleaCaption');
+
+            const msg = pleaMessages[dodgeCount % pleaMessages.length];
+            pleaCaption.textContent = msg;
+            angryBtn.textContent = dodgeCount >= 3 ? "Okay fine, almost forgiven 😅" : msg;
+
+            // Playful dodge translation within safe bounds & gentle shrink
+            const randomX = (Math.random() - 0.5) * 90;
+            const randomY = (Math.random() - 0.5) * 28;
+            const scaleAngry = Math.max(0.75, 1 - dodgeCount * 0.06);
+            angryBtn.style.transform = `translate(${randomX}px, ${randomY}px) scale(${scaleAngry})`;
+
+            // Make Forgive button slightly bigger and more inviting
+            const scaleForgive = Math.min(1.16, 1 + (dodgeCount + 1) * 0.04);
+            forgiveBtn.style.transform = `scale(${scaleForgive})`;
+
+            dodgeCount++;
+        }
+
+        function acceptApology() {
+            playWinFanfare();
+            fireConfettiBurst();
+
+            // Populate claimed perks on final screen
+            const claimedList = document.getElementById('claimedList');
+            claimedList.innerHTML = '<li>✨ Official "No More Gussa" Status Activated</li>';
+            
+            if (claimedCoupons.size > 0) {
+                claimedCoupons.forEach(item => {
+                    const li = document.createElement('li');
+                    li.textContent = `🎟️ Redeemed: ${item}`;
+                    claimedList.appendChild(li);
+                });
+            } else {
+                const li = document.createElement('li');
+                li.textContent = '🍫 Bonus: 1x Emergency Chocolate Treat Included!';
+                claimedList.appendChild(li);
+            }
+
+            showScreen('celebrationScreen');
+        }
+
+        function buildConfirmationMessage() {
+            const perks = claimedCoupons.size > 0
+                ? Array.from(claimedCoupons).join(', ')
+                : '1x Emergency Chocolate Treat';
+            return `Chalo maaf kiya buddhu! 💖 Maine tera game jeet liya aur ye coupons claim kiye hain: ${perks} ✨ Ab dubara gussa mat dilana! 😤🌸`;
+        }
+
+        function sendWhatsAppProof() {
+            const text = encodeURIComponent(buildConfirmationMessage());
+            window.open(`https://wa.me/?text=${text}`, '_blank', 'noopener,noreferrer');
+        }
+
+        function copyConfirmationMessage() {
+            const message = buildConfirmationMessage();
+            const tempInput = document.createElement('textarea');
+            tempInput.value = message;
+            tempInput.style.position = 'fixed';
+            tempInput.style.opacity = '0';
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            try {
+                document.execCommand('copy');
+                showToast('Copied! Paste & send it to him 💖', '📋');
+            } catch (err) {
+                showToast('Screenshot this screen & send! 📸', '💖');
+            }
+            document.body.removeChild(tempInput);
+        }
+
+        function toggleCreatorDashboard() {
+            const modal = document.getElementById('creatorModal');
+            modal.classList.toggle('hidden');
+        }
+
+        function updateLiveStatusUI(data) {
+            const emojiEl = document.getElementById('liveStatusEmoji');
+            const titleEl = document.getElementById('liveStatusTitle');
+            const subtitleEl = document.getElementById('liveStatusSubtitle');
+            const badgeEl = document.getElementById('liveBadgeText');
+            const timeEl = document.getElementById('liveTimestampText');
+            const couponsEl = document.getElementById('liveCouponsList');
+            const dotEl = document.getElementById('statusDot');
+            const bellEl = document.getElementById('statusBellIcon');
+
+            if (data && data.forgiven) {
+                emojiEl.textContent = '🎉💖🥳';
+                titleEl.textContent = 'USNE MAAF KR DIYA! 💖';
+                titleEl.classList.add('text-roseVibrant');
+                subtitleEl.textContent = 'Mission accomplished! She accepted your peace offering and unlocked her coupons.';
+                badgeEl.textContent = 'MAAF KAR DIYA ✓';
+                badgeEl.className = 'font-bold text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded-full';
+                timeEl.textContent = data.timestamp || new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+                dotEl.className = 'w-2.5 h-2.5 rounded-full bg-emerald-500';
+                bellEl.textContent = '💖';
+
+                couponsEl.innerHTML = '';
+                const list = (data.coupons && data.coupons.length > 0)
+                    ? data.coupons
+                    : ['1x Emergency Chocolate Treat'];
+                list.forEach(c => {
+                    const li = document.createElement('li');
+                    li.textContent = `🎟️ ${c}`;
+                    couponsEl.appendChild(li);
+                });
+            } else {
+                emojiEl.textContent = '⏳';
+                titleEl.textContent = 'Waiting for her forgiveness...';
+                titleEl.classList.remove('text-roseVibrant');
+                subtitleEl.textContent = 'Keep this open or check back—updates automatically the second she clicks "Chalo Maaf Kiya 💖"!';
+                badgeEl.textContent = 'Pending 🥺';
+                badgeEl.className = 'font-bold text-amber-600 bg-amber-100 px-2.5 py-0.5 rounded-full';
+                timeEl.textContent = 'Not yet';
+                dotEl.className = 'w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse';
+                bellEl.textContent = '🔔';
+                couponsEl.innerHTML = '<li>• Waiting for her picks...</li>';
+            }
+        }
+
+        function fireConfettiBurst() {
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 80,
+                    spread: 70,
+                    origin: { y: 0.65 },
+                    colors: ['#FF758F', '#FFCAD4', '#C084FC', '#FDE047', '#FFFFFF']
+                });
+            }
+        }
+
+        function replayAll() {
+            dodgeCount = 0;
+            const angryBtn = document.getElementById('angryBtn');
+            const forgiveBtn = document.getElementById('forgiveBtn');
+            angryBtn.style.transform = '';
+            angryBtn.textContent = 'Abhi Bhi Gussa Hoon 😤';
+            forgiveBtn.style.transform = '';
+            document.getElementById('pleaCaption').textContent = '';
+            showScreen('landingScreen');
+        }
+    </script>
+
+    <!-- ==========================================================================
+         5. REAL-TIME CLOUD SYNC (Silent Auth + Live Status Listener)
+         ========================================================================== -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        let db = null;
+        let auth = null;
+        let currentUser = null;
+        let statusDocRef = null;
+        let hasCelebratedLiveAlert = false;
+
+        async function initLiveSync() {
+            try {
+                if (typeof __firebase_config === 'undefined') {
+                    return;
+                }
+                const firebaseConfig = JSON.parse(__firebase_config);
+                const app = initializeApp(firebaseConfig);
+                auth = getAuth(app);
+                db = getFirestore(app);
+
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    const cred = await signInWithCustomToken(auth, __initial_auth_token);
+                    currentUser = cred.user;
+                } else {
+                    const cred = await signInAnonymously(auth);
+                    currentUser = cred.user;
+                }
+
+                if (!currentUser) return;
+
+                // Public shared path so both bestie and creator see the exact same status
+                statusDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'peace_offering_status', 'latest_verdict');
+
+                onSnapshot(statusDocRef, (snapshot) => {
+                    if (snapshot.exists()) {
+                        const data = snapshot.data();
+                        window.updateLiveStatusUI(data);
+
+                        if (data.forgiven && !hasCelebratedLiveAlert) {
+                            hasCelebratedLiveAlert = true;
+                            // Notify if creator modal is open or on landing screen
+                            const onCelebration = !document.getElementById('celebrationScreen').classList.contains('hidden');
+                            if (!onCelebration) {
+                                window.showToast('🎉 USNE MAAF KR DIYA! 💖', '🥳');
+                                window.fireConfettiBurst();
+                            }
+                        } else if (!data.forgiven) {
+                            hasCelebratedLiveAlert = false;
+                        }
+                    } else {
+                        window.updateLiveStatusUI(null);
+                    }
+                }, (err) => {
+                    console.warn('Live listener paused:', err);
+                });
+            } catch (error) {
+                console.warn('Running in offline-safe mode:', error);
+            }
+        }
+
+        // Hook into acceptApology so clicking "Chalo Maaf Kiya 💖" immediately broadcasts
+        const originalAcceptApology = window.acceptApology;
+        window.acceptApology = async function () {
+            // Run immediate UI celebration first for zero latency
+            originalAcceptApology();
+
+            const payload = {
+                forgiven: true,
+                message: 'Usne maaf kr diya! 💖',
+                coupons: claimedCoupons.size > 0
+                    ? Array.from(claimedCoupons)
+                    : ['1x Emergency Chocolate Treat'],
+                timestamp: new Date().toLocaleString([], {
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                }),
+                updatedAt: Date.now()
+            };
+
+            window.updateLiveStatusUI(payload);
+
+            if (currentUser && statusDocRef) {
+                try {
+                    await setDoc(statusDocRef, payload);
+                } catch (e) {
+                    console.warn('Could not sync status:', e);
+                }
+            }
+        };
+
+        window.resetLiveStatus = async function () {
+            hasCelebratedLiveAlert = false;
+            const emptyPayload = {
+                forgiven: false,
+                coupons: [],
+                timestamp: 'Not yet',
+                updatedAt: Date.now()
+            };
+            window.updateLiveStatusUI(emptyPayload);
+
+            if (currentUser && statusDocRef) {
+                try {
+                    await setDoc(statusDocRef, emptyPayload);
+                    window.showToast('Live status reset to Waiting ⏳', '🔄');
+                } catch (e) {
+                    console.warn('Reset sync issue:', e);
+                }
+            }
+        };
+
+        initLiveSync();
+    </script>
+</body>
+</html>
